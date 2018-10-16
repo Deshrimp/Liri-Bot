@@ -8,16 +8,6 @@ switch (command) {
   case "concert-this":
     var artist = process.argv[3]
 
-    spotify.search({ type: "track", query: "All the Small Things" }, function(
-      err,
-      data
-    ) {
-      if (err) {
-        return console.log("Error occurred: " + err)
-      }
-
-      console.log(data)
-    })
     /*  1. `node liri.js concert-this <artist/band name here>`
 
    * This will search the Bands in Town Artist Events API (`"https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"`) for an artist and render the following information about each event to the terminal:
@@ -45,7 +35,7 @@ switch (command) {
               0: { name: artist }
             }
           } = data
-          console.log(data)
+
           console.log(`Artist: ${artist}`)
           console.log(`Song title: ${title}`)
           console.log(`Spotify URL: ${url}`)
