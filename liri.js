@@ -76,32 +76,44 @@ switch (command) {
   case "movie-this":
     var movies = process.argv[3]
     //var movies = "The Matrix"
-
-    request(
-      "https://www.omdbapi.com/?t=" + movies + "&y=&plot=short&apikey=trilogy",
-      function(error, response, body) {
-        if (!error && response.statusCode == 200) {
-          var data = JSON.parse(body)
-          console.log("Movie: " + data.Title)
-          console.log("Year: " + data.Year)
-          console.log("IMDB Rating: " + data.imdbRating)
-          console.log("Rotten Tomatoes Rating: " + data.Ratings[1].Value)
-          console.log("Country: " + data.Country)
-          console.log("Language: " + data.Language)
-          console.log("Plot: " + data.Plot)
-          console.log("Actors" + data.Actors)
+    if (!movies) {
+      request(
+        "https://www.omdbapi.com/?t=Mr. Nobody&y=&plot=short&apikey=trilogy",
+        function(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var data = JSON.parse(body)
+            console.log("Movie: " + data.Title)
+            console.log("Year: " + data.Year)
+            console.log("IMDB Rating: " + data.imdbRating)
+            console.log("Rotten Tomatoes Rating: No Rating")
+            console.log("Country: " + data.Country)
+            console.log("Language: " + data.Language)
+            console.log("Plot: " + data.Plot)
+            console.log("Actors: " + data.Actors)
+          }
         }
-      }
-    )
-    /*
+      )
+    } else {
+      request(
+        "https://www.omdbapi.com/?t=" +
+          movies +
+          "&y=&plot=short&apikey=trilogy",
+        function(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var data = JSON.parse(body)
+            console.log("Movie: " + data.Title)
+            console.log("Year: " + data.Year)
+            console.log("IMDB Rating: " + data.imdbRating)
+            console.log("Rotten Tomatoes Rating: " + data.Ratings[1].Value)
+            console.log("Country: " + data.Country)
+            console.log("Language: " + data.Language)
+            console.log("Plot: " + data.Plot)
+            console.log("Actors: " + data.Actors)
+          }
+        }
+      )
+    }
 
-   * If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
-     
-     * If you haven't watched "Mr. Nobody," then you should: <http://www.imdb.com/title/tt0485947/>
-     
-     * It's on Netflix!
-   
-   * You'll use the request package to retrieve data from the OMDB API. Like all of the in-class activities, the OMDB API requires an API key. You may use `trilogy`. */
     break
   case "do-what-it-says":
     var command = process.argv[3]
