@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/Deshrimp/Liri-Bot#readme",
   "dependencies": {
+    "bandsintown": "^1.0.1",
     "dotenv": "^6.1.0",
-    "node-spotify-api": "^1.0.7"
+    "node-spotify-api": "^1.0.7",
+    "omdb": "^0.8.0"
   }
 }

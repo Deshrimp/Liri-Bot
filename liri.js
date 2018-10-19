@@ -2,21 +2,27 @@ require("dotenv").config()
 var keys = require("./keys.js")
 var Spotify = require("node-spotify-api")
 var spotify = new Spotify(keys.spotify)
+var bandsintown = require("bandsintown")("codingbootcamp")
 var command = process.argv[2]
+var request = require("request")
 
 switch (command) {
   case "concert-this":
     var artist = process.argv[3]
+    bandsintown.getArtistEventList(artist).then(function(events) {
+      console.log("Artist: " + events[0].artists[0].name)
+      console.log("----------Events----------")
+      for (var i = 0; i < events.length; i++) {
+        console.log("Event: " + events[i].title)
+        console.log("When: " + events[i].formatted_datetime)
+        console.log(
+          "Where: " + events[i].venue.place + " " + events[i].formatted_location
+        )
+        console.log("Tickets: " + events[i].ticket_status)
+        console.log("------------------------------------------")
+      }
+    })
 
-    /*  1. `node liri.js concert-this <artist/band name here>`
-
-   * This will search the Bands in Town Artist Events API (`"https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"`) for an artist and render the following information about each event to the terminal:
-
-     * Name of the venue
-
-     * Venue location
-
-     * Date of the Event (use moment to format this as "MM/DD/YYYY")*/
     break
   case "spotify-this-song":
     const song = process.argv[3]
@@ -24,9 +30,6 @@ switch (command) {
       spotify
         .request("https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE")
         .then(function(data) {
-          //  console.log(data.name)
-          // console.log(data.albums.artists)
-
           const {
             external_urls: { spotify: url },
             name: title,
@@ -71,7 +74,34 @@ switch (command) {
 
     break
   case "movie-this":
-    var movie = process.argv[3]
+    var movies = process.argv[3]
+    //var movies = "The Matrix"
+
+    request(
+      "https://www.omdbapi.com/?t=" + movies + "&y=&plot=short&apikey=trilogy",
+      function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+          var data = JSON.parse(body)
+          console.log("Movie: " + data.Title)
+          console.log("Year: " + data.Year)
+          console.log("IMDB Rating: " + data.imdbRating)
+          console.log("Rotten Tomatoes Rating: " + data.Ratings[1].Value)
+          console.log("Country: " + data.Country)
+          console.log("Language: " + data.Language)
+          console.log("Plot: " + data.Plot)
+          console.log("Actors" + data.Actors)
+        }
+      }
+    )
+    /*
+
+   * If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
+     
+     * If you haven't watched "Mr. Nobody," then you should: <http://www.imdb.com/title/tt0485947/>
+     
+     * It's on Netflix!
+   
+   * You'll use the request package to retrieve data from the OMDB API. Like all of the in-class activities, the OMDB API requires an API key. You may use `trilogy`. */
     break
   case "do-what-it-says":
     var command = process.argv[3]
